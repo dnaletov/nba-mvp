@@ -1,14 +1,13 @@
-import React from 'react';
-import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import logo from '../../assets/basketball-ball-svgrepo-com.svg';
+import React from "react";
+import styled from "styled-components";
+import logo from "../../assets/basketball-ball-svgrepo-com.svg";
+import AnimatedLink from "../animatedLink/AnimatedLink";
 
 const HeaderWrapper = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 6px;
+  padding: 12px;
   background-color: #2d3748;
   color: white;
   width: 100%;
@@ -18,12 +17,17 @@ const HeaderWrapper = styled.header`
   z-index: 1000;
   max-width: 100%;
   box-sizing: border-box;
+  a {
+    color: white;
+  }
 `;
 
 const Logo = styled.div`
   cursor: pointer;
+  display: flex;
+  align-items: center;
   img {
-    width: 40px;
+    width: 30px;
     height: auto;
   }
 `;
@@ -50,37 +54,19 @@ const ListItem = styled.li`
 const Header: React.FC = () => {
   return (
     <HeaderWrapper>
-      <Link to="/" style={{ textDecoration: 'none' }}>
+      <AnimatedLink to="/">
         <Logo>
           <img src={logo} alt="MVP Leaderboard Logo" />
         </Logo>
-      </Link>
+      </AnimatedLink>
       <Nav>
         <List>
           <ListItem>
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Link to="/about">About</Link>
-            </motion.div>
+            <AnimatedLink to="/about">About</AnimatedLink>
           </ListItem>
           <ListItem>
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Link to="/contacts">Contacts</Link>
-            </motion.div>
+            <AnimatedLink to="/contacts">Contacts</AnimatedLink>
           </ListItem>
-          {/* <ListItem>
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              transition={{ duration: 0.3 }}
-            >
-              <Link to="/something">Add_new_page</Link>
-            </motion.div>
-          </ListItem> */}
         </List>
       </Nav>
     </HeaderWrapper>
