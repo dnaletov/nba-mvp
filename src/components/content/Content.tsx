@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+// import { getMvpPlayers } from "../../services/nbaService";
 
 const mvpData = {
   name: "Nikola Jokić",
@@ -14,7 +15,6 @@ const MvpWrapper = styled.section`
   display: flex;
   align-items: center;
   justify-content: center; /* Центрирует содержимое */
-  //   gap: 40px; /* Добавляет пространство между картинкой и текстом */
   padding: 40px 20px;
   background-color: rgb(182, 182, 182);
   color: white;
@@ -41,7 +41,7 @@ const Image = styled.img`
 `;
 
 const InfoContainer = styled.div`
-  flex: 1; /* Равная ширина с картинкой */
+  flex: 1;
   padding: 20px;
   text-align: left;
 `;
@@ -69,9 +69,35 @@ const Points = styled.p`
 `;
 
 const Mvp: React.FC = () => {
+  //   const [mvpData, setMvpData] = useState<any>(null);
+  //   const [loading, setLoading] = useState<boolean>(true);
+
+  //   const fetchMvpData = async () => {
+  //     try {
+  //       const data = await getMvpPlayers();
+  //       const mvp = data[19];
+  //       setMvpData({
+  //         name: `${mvp.firstname} ${mvp.lastname}`,
+  //         position: mvp.leagues.standard.pos,
+  //         team: "Unknown Team", // Так как у вас нет информации о команде, можно оставить временно.
+  //         points: "N/A", // Также у вас нет данных по очкам, но можно добавить позже.
+  //         imageUrl: `https://cdn.nba.com/headshots/nba/latest/1040x760/${mvp.id}.png`, // Генерация изображения по ID игрока.
+  //       });
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error("Ошибка при получении данных MVP", error);
+  //       setLoading(false); // Завершаем загрузку, даже если ошибка
+  //     }
+  //   };
+
+  //   useEffect(() => {
+  //     fetchMvpData(); // Загружаем данные при монтировании компонента
+  //   }, []);
+
+  //   if (loading) return <p>Загрузка...</p>; // Показываем индикатор загрузки
+
   return (
     <MvpWrapper>
-      {/* Блок с изображением */}
       <ImageContainer>
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -82,7 +108,6 @@ const Mvp: React.FC = () => {
         </motion.div>
       </ImageContainer>
 
-      {/* Информация о лидере */}
       <InfoContainer>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
