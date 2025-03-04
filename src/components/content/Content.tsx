@@ -30,22 +30,21 @@ const playersData = [
 const ContentWrapper = styled.section`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: flex-start; /* Начинаем контент сверху */
-  padding: 54px; /* Паддинг для контента */
+  padding: 54px;
   background-color: rgb(182, 182, 182);
-  width: 100vw;
   height: 100vh;
-  box-sizing: border-box;
   overflow-y: auto;
-  //   /* Chrome, Safari, Edge */
-  //   ::-webkit-scrollbar {
-  //     width: 0px; /* Скрываем ползунок */
-  //   }
+`;
 
-  //   /* Firefox */
-  //   scrollbar-width: none;
-  //   -ms-overflow-style: none; /* old IE/Edge */
+const InnerContent = styled.div`
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+  }
 `;
 
 const Content: React.FC = () => {
@@ -78,9 +77,11 @@ const Content: React.FC = () => {
 
   return (
     <ContentWrapper>
-      {playersData.map((player, index) => (
-        <PlayerCard key={index} {...player} />
-      ))}
+      <InnerContent>
+        {playersData.map((player, index) => (
+          <PlayerCard key={index} {...player} />
+        ))}
+      </InnerContent>
     </ContentWrapper>
   );
 };
