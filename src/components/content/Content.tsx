@@ -30,7 +30,7 @@ const playersData = [
 const ContentWrapper = styled.section`
   display: flex;
   flex-direction: column;
-  padding: 54px;
+  padding: 46px;
   background-color: rgb(182, 182, 182);
   height: 100vh;
   overflow-y: auto;
