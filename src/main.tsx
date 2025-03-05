@@ -38,7 +38,7 @@ const GlobalStyles = createGlobalStyle`
   /* Reset button styles */
   button {
     all: unset; /* Remove default styles */
-    font: inherit
+    font: inherit;
     cursor: pointer;
   }
 
@@ -64,7 +64,38 @@ const GlobalStyles = createGlobalStyle`
     margin: 0 auto;
     padding: 0 16px;
   }
+
+  /* Customizing scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f0f0f0; /* Light grey background for the track */
+    border-radius: 4px; /* Rounded corners */
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #888; /* Medium grey for the thumb */
+    border-radius: 4px; /* Rounded corners for the thumb */
+    border: 2px solid #f0f0f0; /* Border to create a smooth effect */
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Darker grey when hovering */
+  }
+
+  ::-webkit-scrollbar-thumb:active {
+    background-color: #333; /* Even darker when the thumb is active */
+  }
+
+  ::-webkit-scrollbar-button {
+    display: none; /* Hide the scrollbar buttons */
+  }
 `;
+
+export default GlobalStyles;
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

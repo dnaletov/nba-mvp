@@ -12,7 +12,7 @@ interface Player {
 const Card = styled.div`
   display: flex;
   margin: 24px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: #2d3748;
   border-radius: 10px;
   padding: 24px;
   width: 70%;
