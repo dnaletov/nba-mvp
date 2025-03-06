@@ -32,6 +32,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PlayerCard from "../PlayerCard/PlayerCard";
 import { playersData } from "../PlayerCard/playersData";
+import Popup from "../popup/Popup";
 
 const ContentWrapper = styled.section`
   display: flex;
@@ -57,6 +58,11 @@ const Content: React.FC = () => {
   const [visiblePlayers, setVisiblePlayers] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const openClosePopup = () => {
+    setIsPopupOpen(!isPopupOpen);
+  };
 
   const hasMounted = useRef(false);
 
@@ -93,10 +99,11 @@ const Content: React.FC = () => {
 
   return (
     <ContentWrapper onScroll={handleScroll}>
-      <InnerContent>
+      <InnerContent onClick={openClosePopup}>
         {visiblePlayers.map((player, index) => (
           <PlayerCard key={index} {...player} />
         ))}
+        {isPopupOpen && <Popup onClose={openClosePopup} />}
         {isLoading && <p>Loading...</p>}
       </InnerContent>
     </ContentWrapper>

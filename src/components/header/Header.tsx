@@ -37,7 +37,7 @@ const Header: React.FC = () => {
     <HeaderWrapper>
       <Links to="/">
         <Logo>
-          <img src={logo} alt="MVP Leaderboard Logo" />
+          <img src={logo} alt="Logo" />
         </Logo>
       </Links>
       <Nav>
