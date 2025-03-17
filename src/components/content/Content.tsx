@@ -32,11 +32,8 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PlayerCard from "../PlayerCard/PlayerCard";
 import { playersData } from "../PlayerCard/playersData";
-import Popup from "../popup/Popup";
 
 const ContentWrapper = styled.section`
-  display: flex;
-  flex-direction: column;
   padding: 46px;
   background-color: rgb(182, 182, 182);
   height: 100vh;
@@ -44,13 +41,28 @@ const ContentWrapper = styled.section`
 `;
 
 const InnerContent = styled.div`
-  flex-grow: 1;
   display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
   @media (max-width: 768px) {
     justify-content: flex-start;
+  }
+`;
+
+const PlayersContainer = styled.div`
+  display: grid;
+  width: 100%;
+  max-width: 800px;
+  gap: 24px;
+  padding: 24px;
+  justify-content: center;
+
+  @media (min-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+
+    & > :first-child {
+      grid-column: span 2;
+      width: 100%;
+    }
   }
 `;
 
@@ -58,17 +70,11 @@ const Content: React.FC = () => {
   const [visiblePlayers, setVisiblePlayers] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-
-  const openClosePopup = () => {
-    setIsPopupOpen(!isPopupOpen);
-  };
-
   const hasMounted = useRef(false);
 
   const loadPlayers = (page: number) => {
-    const startIndex = (page - 1) * 5;
-    const nextPlayers = playersData.slice(startIndex, startIndex + 5);
+    const startIndex = (page - 1) * 9;
+    const nextPlayers = playersData.slice(startIndex, startIndex + 9);
     setVisiblePlayers((prev) => [...prev, ...nextPlayers]);
   };
 
@@ -99,15 +105,15 @@ const Content: React.FC = () => {
 
   return (
     <ContentWrapper onScroll={handleScroll}>
-      <InnerContent onClick={openClosePopup}>
-        {visiblePlayers.map((player, index) => (
-          <PlayerCard key={index} {...player} />
-        ))}
-        {isPopupOpen && <Popup onClose={openClosePopup} />}
+      <InnerContent>
+        <PlayersContainer>
+          {visiblePlayers.map((player, index) => (
+            <PlayerCard key={index} {...player} />
+          ))}
+        </PlayersContainer>
         {isLoading && <p>Loading...</p>}
       </InnerContent>
     </ContentWrapper>
   );
 };
-
 export default Content;
