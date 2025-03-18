@@ -28,12 +28,13 @@
 
 //   if (loading) return <p>Загрузка...</p>; // Показываем индикатор загрузки
 
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import PlayerCard from "../PlayerCard/PlayerCard";
-import { playersData } from "../PlayerCard/playersData";
+import PlayerCard from "../molecules/PlayerCard";
+import Popup from "../atoms/Popup";
+import { playersData } from "../../services/playersData";
 
-const ContentWrapper = styled.section`
+const PlayersListWrapper = styled.section`
   padding: 46px;
   background-color: rgb(182, 182, 182);
   height: 100vh;
@@ -66,10 +67,11 @@ const PlayersContainer = styled.div`
   }
 `;
 
-const Content: React.FC = () => {
+const PlayersList: React.FC = () => {
   const [visiblePlayers, setVisiblePlayers] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedPlayer, setSelectedPlayer] = useState<any | null>(null);
   const hasMounted = useRef(false);
 
   const loadPlayers = (page: number) => {
@@ -85,6 +87,10 @@ const Content: React.FC = () => {
     hasMounted.current = true;
     loadPlayers(page);
   }, []);
+
+  const handleCardClick = (player: any) => {
+    setSelectedPlayer(player);
+  };
 
   const handleScroll = (e: React.UIEvent<HTMLElement>) => {
     const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
@@ -104,16 +110,28 @@ const Content: React.FC = () => {
   }, [page]);
 
   return (
-    <ContentWrapper onScroll={handleScroll}>
+    <PlayersListWrapper onScroll={handleScroll}>
       <InnerContent>
         <PlayersContainer>
           {visiblePlayers.map((player, index) => (
-            <PlayerCard key={index} {...player} />
+            <PlayerCard
+              key={index}
+              {...player}
+              onClick={() => handleCardClick(player)}
+            />
           ))}
         </PlayersContainer>
         {isLoading && <p>Loading...</p>}
       </InnerContent>
-    </ContentWrapper>
+      {selectedPlayer && (
+        <Popup onClose={() => setSelectedPlayer(null)}>
+          <h2>{selectedPlayer.name}</h2>
+          <p>Position: {selectedPlayer.position}</p>
+          <p>Team: {selectedPlayer.team}</p>
+          <p>Points: {selectedPlayer.points}</p>
+        </Popup>
+      )}
+    </PlayersListWrapper>
   );
 };
-export default Content;
+export default PlayersList;

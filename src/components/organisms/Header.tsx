@@ -1,7 +1,6 @@
-import React from "react";
 import styled from "styled-components";
 import logo from "../../assets/basketball-ball-svgrepo-com.svg";
-import Links from "../links/Links";
+import Links from "../atoms/Links";
 
 const HeaderWrapper = styled.header`
   display: flex;
