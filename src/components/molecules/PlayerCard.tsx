@@ -30,6 +30,11 @@ const Image = styled.img`
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid white;
+
+  @media (max-width: 768px) {
+    width: 130px;
+    height: 130px;
+  }
 `;
 
 const InfoContainer = styled.div`

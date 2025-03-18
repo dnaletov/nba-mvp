@@ -33,11 +33,12 @@ import styled from "styled-components";
 import PlayerCard from "../molecules/PlayerCard";
 import Popup from "../atoms/Popup";
 import { playersData } from "../../services/playersData";
+import LoadingPlaceholder from "../atoms/LoadingIndicator";
 
 const PlayersListWrapper = styled.section`
+  min-height: 100vh;
   padding: 46px;
   background-color: rgb(182, 182, 182);
-  height: 100vh;
   overflow-y: auto;
 `;
 
@@ -92,8 +93,12 @@ const PlayersList: React.FC = () => {
     setSelectedPlayer(player);
   };
 
-  const handleScroll = (e: React.UIEvent<HTMLElement>) => {
-    const { scrollHeight, scrollTop, clientHeight } = e.currentTarget;
+  const handleScroll = () => {
+    const wrapper = document.documentElement;
+    const scrollTop = wrapper.scrollTop;
+    const scrollHeight = wrapper.scrollHeight;
+    const clientHeight = wrapper.clientHeight;
+
     const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
 
     if (scrollPercentage >= 80 && !isLoading) {
@@ -101,6 +106,11 @@ const PlayersList: React.FC = () => {
       setPage((prev) => prev + 1);
     }
   };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   useEffect(() => {
     if (page > 1) {
@@ -121,7 +131,6 @@ const PlayersList: React.FC = () => {
             />
           ))}
         </PlayersContainer>
-        {isLoading && <p>Loading...</p>}
       </InnerContent>
       {selectedPlayer && (
         <Popup onClose={() => setSelectedPlayer(null)}>
@@ -131,6 +140,7 @@ const PlayersList: React.FC = () => {
           <p>Points: {selectedPlayer.points}</p>
         </Popup>
       )}
+      {isLoading && <LoadingPlaceholder />}
     </PlayersListWrapper>
   );
 };
