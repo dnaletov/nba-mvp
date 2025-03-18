@@ -1,38 +1,8 @@
-// import { getMvpPlayers } from "../../services/nbaService";
-
-// const Content: React.FC = () => {
-//   const [mvpData, setMvpData] = useState<any>(null);
-//   const [loading, setLoading] = useState<boolean>(true);
-
-//   const fetchMvpData = async () => {
-//     try {
-//       const data = await getMvpPlayers();
-//       const mvp = data[19];
-//       setMvpData({
-//         name: `${mvp.firstname} ${mvp.lastname}`,
-//         position: mvp.leagues.standard.pos,
-//         team: "Unknown Team", // Так как у вас нет информации о команде, можно оставить временно.
-//         points: "N/A", // Также у вас нет данных по очкам, но можно добавить позже.
-//         imageUrl: `https://cdn.nba.com/headshots/nba/latest/1040x760/${mvp.id}.png`, // Генерация изображения по ID игрока.
-//       });
-//       setLoading(false);
-//     } catch (error) {
-//       console.error("Ошибка при получении данных MVP", error);
-//       setLoading(false); // Завершаем загрузку, даже если ошибка
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchMvpData(); // Загружаем данные при монтировании компонента
-//   }, []);
-
-//   if (loading) return <p>Загрузка...</p>; // Показываем индикатор загрузки
-
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import PlayerCard from "../molecules/PlayerCard";
 import Popup from "../atoms/Popup";
-import { playersData } from "../../services/playersData";
+import { getPlayers } from "../../services/nbaApi";
 import LoadingPlaceholder from "../atoms/LoadingIndicator";
 
 const PlayersListWrapper = styled.section`
@@ -73,36 +43,36 @@ const PlayersList: React.FC = () => {
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<any | null>(null);
-  const hasMounted = useRef(false);
 
-  const loadPlayers = (page: number) => {
-    const startIndex = (page - 1) * 9;
-    const nextPlayers = playersData.slice(startIndex, startIndex + 9);
-    setVisiblePlayers((prev) => [...prev, ...nextPlayers]);
+  const fetchPlayers = async (page: number) => {
+    try {
+      const playerData = await getPlayers(page);
+      if (!Array.isArray(playerData)) {
+        console.error("Invalid data format", playerData);
+        return;
+      }
+
+      setVisiblePlayers((prev) =>
+        page === 1 ? playerData : [...prev, ...playerData]
+      );
+    } catch (error) {
+      console.error("Error fetching players:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
-    if (hasMounted.current) {
-      return;
-    }
-    hasMounted.current = true;
-    loadPlayers(page);
-  }, []);
+    fetchPlayers(page);
+  }, [page]);
 
   const handleCardClick = (player: any) => {
     setSelectedPlayer(player);
   };
 
   const handleScroll = () => {
-    const wrapper = document.documentElement;
-    const scrollTop = wrapper.scrollTop;
-    const scrollHeight = wrapper.scrollHeight;
-    const clientHeight = wrapper.clientHeight;
-
-    const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
-
-    if (scrollPercentage >= 80 && !isLoading) {
-      setIsLoading(true);
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+    if (scrollTop + clientHeight >= scrollHeight * 0.8 && !isLoading) {
       setPage((prev) => prev + 1);
     }
   };
@@ -112,24 +82,21 @@ const PlayersList: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    if (page > 1) {
-      loadPlayers(page);
-      setIsLoading(false);
-    }
-  }, [page]);
-
   return (
-    <PlayersListWrapper onScroll={handleScroll}>
+    <PlayersListWrapper>
       <InnerContent>
         <PlayersContainer>
-          {visiblePlayers.map((player, index) => (
-            <PlayerCard
-              key={index}
-              {...player}
-              onClick={() => handleCardClick(player)}
-            />
-          ))}
+          {visiblePlayers.length > 0 ? (
+            visiblePlayers.map((player, index) => (
+              <PlayerCard
+                key={index}
+                {...player}
+                onClick={() => handleCardClick(player)}
+              />
+            ))
+          ) : (
+            <p>Players undefined</p>
+          )}
         </PlayersContainer>
       </InnerContent>
       {selectedPlayer && (
@@ -144,4 +111,5 @@ const PlayersList: React.FC = () => {
     </PlayersListWrapper>
   );
 };
+
 export default PlayersList;
