@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-interface Player {
+interface TPlayerCard {
   name: string;
   position: string;
   team: string;
@@ -18,10 +18,6 @@ const Card = styled.div`
   min-width: 320px;
   align-items: center;
   cursor: pointer;
-
-  &:first-child {
-    background-color: #1a202c;
-  }
 `;
 
 const Image = styled.img`
@@ -72,7 +68,7 @@ const Name = styled.h2`
 //   }
 // `;
 
-const PlayerCard: React.FC<Player> = ({ name, imageUrl, onClick }) => {
+const PlayerCard: React.FC<TPlayerCard> = ({ name, imageUrl, onClick }) => {
   return (
     <Card onClick={onClick}>
       <Image src={imageUrl} alt={`${name} - MVP`} />

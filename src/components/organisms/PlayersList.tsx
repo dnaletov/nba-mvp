@@ -7,6 +7,7 @@ import {
   fetchPlayersWithImage,
   fetchPlayerStats,
 } from "../../services/playersData";
+import PlayerStat from "../molecules/PlayerStat";
 
 const PlayersListWrapper = styled.section`
   min-height: 100vh;
@@ -123,19 +124,19 @@ const PlayersList: React.FC = () => {
       </InnerContent>
       {selectedPlayer && (
         <Popup onClose={() => setSelectedPlayer(null)}>
-          <h2>{selectedPlayer.name}</h2>
           {isLoadingStats ? (
             <p>Loading stats...</p>
           ) : playerStats ? (
-            <>
-              <p>Team: {playerStats.team}</p>
-              <p>Age: {playerStats.age}</p>
-              <p>Points: {playerStats.points}</p>
-              <p>Assists: {playerStats.assists}</p>
-              <p>Rebounds: {playerStats.rebounds}</p>
-              <p>Steals: {playerStats.steals}</p>
-              <p>Blocks: {playerStats.blocks}</p>
-            </>
+            <PlayerStat
+              name={selectedPlayer.name}
+              imageUrl={selectedPlayer.imageUrl}
+              team={playerStats.team}
+              age={playerStats.age}
+              points={playerStats.points}
+              assists={playerStats.assists}
+              rebounds={playerStats.rebounds}
+              blocks={playerStats.blocks}
+            />
           ) : (
             <p>No stats available</p>
           )}
