@@ -5,7 +5,7 @@ const API_URL = "http://localhost:5000";
 export const getPlayers = async (page: number, perPage: number = 10) => {
   try {
     const response = await axios.get(`${API_URL}/players`, {
-      params: { page, per_page: perPage },
+      params: { page, per_page: perPage, activeOnly: true },
     });
 
     return response.data.players;
@@ -20,7 +20,7 @@ export const getPlayerStats = async (playerId: number) => {
     const response = await axios.get(`${API_URL}/player/${playerId}`);
     return response.data;
   } catch (error) {
-    console.error("Error fetching player stats:", error);
+    console.error(`Error fetching stats for player ${playerId}:`, error);
     throw error;
   }
 };

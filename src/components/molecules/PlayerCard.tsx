@@ -72,22 +72,13 @@ const Text = styled.p`
   }
 `;
 
-const PlayerCard: React.FC<Player> = ({
-  name,
-  position,
-  team,
-  points,
-  imageUrl,
-  onClick,
-}) => {
+const PlayerCard: React.FC<Player> = ({ name, team, imageUrl, onClick }) => {
   return (
     <Card onClick={onClick}>
       <Image src={imageUrl} alt={`${name} - MVP`} />
       <InfoContainer>
         <Name>{name}</Name>
         <Text>Team: {team}</Text>
-        <Text>Position: {position}</Text>
-        <Text>Points: {points}</Text>
       </InfoContainer>
     </Card>
   );

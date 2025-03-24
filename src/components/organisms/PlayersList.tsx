@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import PlayerCard from "../molecules/PlayerCard";
 import Popup from "../atoms/Popup";
-import { getPlayers } from "../../services/nbaApi";
 import LoadingPlaceholder from "../atoms/LoadingIndicator";
+import { fetchPlayersWithStats } from "../../services/playersData";
 
 const PlayersListWrapper = styled.section`
   min-height: 100vh;
@@ -41,24 +41,24 @@ const PlayersContainer = styled.div`
 const PlayersList: React.FC = () => {
   const [visiblePlayers, setVisiblePlayers] = useState<any[]>([]);
   const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
   const [selectedPlayer, setSelectedPlayer] = useState<any | null>(null);
 
-  const fetchPlayers = async (page: number) => {
-    try {
-      const playerData = await getPlayers(page);
-      if (!Array.isArray(playerData)) {
-        console.error("Invalid data format", playerData);
-        return;
-      }
+  // Используем useRef для отслеживания состояния загрузки
+  const isLoadingRef = useRef(false);
 
+  const fetchPlayers = async (page: number) => {
+    if (isLoadingRef.current) return; // Блокируем запрос, если уже идет загрузка
+
+    isLoadingRef.current = true; // Устанавливаем флаг загрузки
+    try {
+      const players = await fetchPlayersWithStats(page);
       setVisiblePlayers((prev) =>
-        page === 1 ? playerData : [...prev, ...playerData]
+        page === 1 ? players : [...prev, ...players]
       );
     } catch (error) {
       console.error("Error fetching players:", error);
     } finally {
-      setIsLoading(false);
+      isLoadingRef.current = false; // Сбрасываем флаг загрузки
     }
   };
 
@@ -70,16 +70,25 @@ const PlayersList: React.FC = () => {
     setSelectedPlayer(player);
   };
 
+  // Обработчик прокрутки
   const handleScroll = () => {
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-    if (scrollTop + clientHeight >= scrollHeight * 0.8 && !isLoading) {
+
+    // Проверяем, если прокрутка почти достигла низа и если не идет загрузка
+    if (
+      scrollTop + clientHeight >= scrollHeight * 0.95 &&
+      !isLoadingRef.current
+    ) {
       setPage((prev) => prev + 1);
     }
   };
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (
@@ -102,12 +111,10 @@ const PlayersList: React.FC = () => {
       {selectedPlayer && (
         <Popup onClose={() => setSelectedPlayer(null)}>
           <h2>{selectedPlayer.name}</h2>
-          <p>Position: {selectedPlayer.position}</p>
           <p>Team: {selectedPlayer.team}</p>
-          <p>Points: {selectedPlayer.points}</p>
         </Popup>
       )}
-      {isLoading && <LoadingPlaceholder />}
+      {isLoadingRef.current && <LoadingPlaceholder />}
     </PlayersListWrapper>
   );
 };
