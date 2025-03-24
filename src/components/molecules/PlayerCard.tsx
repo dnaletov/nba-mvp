@@ -58,19 +58,19 @@ const Name = styled.h2`
   }
 `;
 
-const Text = styled.p`
-  font-size: 0.8rem;
-  margin: 2px;
+// const Text = styled.p`
+//   font-size: 0.8rem;
+//   margin: 2px;
 
-  ${Card}:first-child & {
-    font-size: 1.2rem;
-    margin: 5px;
-  }
+//   ${Card}:first-child & {
+//     font-size: 1.2rem;
+//     margin: 5px;
+//   }
 
-  @media (max-width: 768px) {
-    font-size: 0.8rem;
-  }
-`;
+//   @media (max-width: 768px) {
+//     font-size: 0.8rem;
+//   }
+// `;
 
 const PlayerCard: React.FC<Player> = ({ name, imageUrl, onClick }) => {
   return (

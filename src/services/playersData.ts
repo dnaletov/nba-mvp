@@ -1,4 +1,4 @@
-import { getPlayers } from "./nbaApi";
+import { getPlayers, getPlayerStats } from "./nbaApi";
 
 export const fetchPlayersWithImage = async (
   page: number,
@@ -20,6 +20,33 @@ export const fetchPlayersWithImage = async (
 
     console.log("TEST:", playersWithImage);
     return playersWithImage;
+  } catch (error) {
+    console.error("Error fetching players:", error);
+    return [];
+  }
+};
+
+export const fetchPlayerStats = async (playerId: number) => {
+  try {
+    const playerData = await getPlayerStats(playerId);
+
+    if (!Array.isArray(playerData)) {
+      console.error("Invalid stats data format", playerData);
+      return [];
+    }
+
+    const playerStats = playerData.map((player) => ({
+      age: player.PLAYER_AGE,
+      team: player.TEAM_ABBREVIATION,
+      assists: player.AST,
+      blocks: player.BLK,
+      points: player.PTS,
+      rebounds: player.REB,
+      steals: player.STL,
+    }));
+
+    console.log("TEST2:", playerStats);
+    return playerStats;
   } catch (error) {
     console.error("Error fetching players:", error);
     return [];
