@@ -1,8 +1,8 @@
 import { getPlayers } from "./nbaApi";
 
-export const fetchPlayersWithStats = async (
+export const fetchPlayersWithImage = async (
   page: number,
-  perPage: number = 10
+  perPage: number = 20
 ) => {
   try {
     const playerData = await getPlayers(page, perPage);
@@ -15,7 +15,6 @@ export const fetchPlayersWithStats = async (
     const playersWithImage = playerData.map((player) => ({
       id: player.id,
       name: player.full_name,
-      team: player.team,
       imageUrl: `https://cdn.nba.com/headshots/nba/latest/1040x760/${player.id}.png`,
     }));
 

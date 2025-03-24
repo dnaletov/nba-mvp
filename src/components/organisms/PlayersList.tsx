@@ -3,7 +3,7 @@ import styled from "styled-components";
 import PlayerCard from "../molecules/PlayerCard";
 import Popup from "../atoms/Popup";
 import LoadingPlaceholder from "../atoms/LoadingIndicator";
-import { fetchPlayersWithStats } from "../../services/playersData";
+import { fetchPlayersWithImage } from "../../services/playersData";
 
 const PlayersListWrapper = styled.section`
   min-height: 100vh;
@@ -42,23 +42,21 @@ const PlayersList: React.FC = () => {
   const [visiblePlayers, setVisiblePlayers] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const [selectedPlayer, setSelectedPlayer] = useState<any | null>(null);
-
-  // Используем useRef для отслеживания состояния загрузки
   const isLoadingRef = useRef(false);
 
   const fetchPlayers = async (page: number) => {
-    if (isLoadingRef.current) return; // Блокируем запрос, если уже идет загрузка
+    if (isLoadingRef.current) return;
 
-    isLoadingRef.current = true; // Устанавливаем флаг загрузки
+    isLoadingRef.current = true;
     try {
-      const players = await fetchPlayersWithStats(page);
+      const players = await fetchPlayersWithImage(page);
       setVisiblePlayers((prev) =>
         page === 1 ? players : [...prev, ...players]
       );
     } catch (error) {
       console.error("Error fetching players:", error);
     } finally {
-      isLoadingRef.current = false; // Сбрасываем флаг загрузки
+      isLoadingRef.current = false;
     }
   };
 
@@ -70,11 +68,9 @@ const PlayersList: React.FC = () => {
     setSelectedPlayer(player);
   };
 
-  // Обработчик прокрутки
   const handleScroll = () => {
     const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
-    // Проверяем, если прокрутка почти достигла низа и если не идет загрузка
     if (
       scrollTop + clientHeight >= scrollHeight * 0.95 &&
       !isLoadingRef.current
@@ -95,17 +91,14 @@ const PlayersList: React.FC = () => {
     <PlayersListWrapper>
       <InnerContent>
         <PlayersContainer>
-          {visiblePlayers.length > 0 ? (
+          {visiblePlayers.length > 0 &&
             visiblePlayers.map((player, index) => (
               <PlayerCard
                 key={index}
                 {...player}
                 onClick={() => handleCardClick(player)}
               />
-            ))
-          ) : (
-            <p>Players undefined</p>
-          )}
+            ))}
         </PlayersContainer>
       </InnerContent>
       {selectedPlayer && (
