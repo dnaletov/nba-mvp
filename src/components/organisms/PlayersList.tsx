@@ -9,6 +9,7 @@ import {
 } from "../../services/playersData";
 import PlayerStat from "../molecules/PlayerStat";
 import { DEFAULT_PER_PAGE } from "../../constants";
+import SearchInput from "../atoms/SearchInput";
 
 const PlayersListWrapper = styled.section`
   min-height: 100vh;
@@ -24,17 +25,6 @@ const InnerContent = styled.div`
   @media (max-width: 768px) {
     align-items: flex-start;
   }
-`;
-
-const SearchInput = styled.input`
-  width: 100%;
-  max-width: 400px;
-  padding: 8px 12px;
-  margin-bottom: 20px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  outline: none;
 `;
 
 const PlayersContainer = styled.div`
@@ -135,10 +125,9 @@ const PlayersList: React.FC = () => {
     <PlayersListWrapper>
       <InnerContent>
         <SearchInput
-          type="text"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Поиск игрока..."
+          onChange={setSearch}
+          placeholder={"Поиск игрока..."}
         />
         <PlayersContainer>
           {filteredPlayers.length > 0 ? (

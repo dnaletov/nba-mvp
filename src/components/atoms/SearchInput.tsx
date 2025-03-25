@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import styled from "styled-components";
 
 const Input = styled.input`
@@ -11,7 +12,7 @@ const Input = styled.input`
 
 interface SearchInputProps {
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (value: string) => void;
   placeholder?: string;
 }
 
@@ -20,11 +21,39 @@ const SearchInput: React.FC<SearchInputProps> = ({
   onChange,
   placeholder,
 }) => {
+  const [inputValue, setInputValue] = useState(value);
+  const lastDeleteTimeRef = useRef<number>(0);
+  const timeoutRef = useRef<number | null>(null);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    const now = Date.now();
+
+    if (newValue.length < inputValue.length) {
+      const timeSinceLastDelete = now - lastDeleteTimeRef.current;
+
+      if (timeSinceLastDelete < 500) {
+        return;
+      }
+      lastDeleteTimeRef.current = now;
+    }
+
+    setInputValue(newValue);
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = window.setTimeout(() => {
+      onChange(newValue);
+    }, 300);
+  };
+
   return (
     <Input
       type="text"
-      value={value}
-      onChange={onChange}
+      value={inputValue}
+      onChange={handleChange}
       placeholder={placeholder || "Search..."}
     />
   );
