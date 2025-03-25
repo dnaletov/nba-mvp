@@ -7,7 +7,7 @@ interface TPlayerCard {
   variant?: "card" | "list";
 }
 
-const Card = styled.div<{ variant: "card" | "list" }>`
+const Card = styled.div<{ $variant: "card" | "list" }>`
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -15,8 +15,8 @@ const Card = styled.div<{ variant: "card" | "list" }>`
   padding: 24px;
   background-color: #2d3748;
 
-  ${({ variant }) =>
-    variant === "card"
+  ${({ $variant }) =>
+    $variant === "card"
       ? `
     max-width: 800px;
     min-width: 320px;
@@ -27,13 +27,13 @@ const Card = styled.div<{ variant: "card" | "list" }>`
   `}
 `;
 
-const Image = styled.img<{ variant: "card" | "list" }>`
+const Image = styled.img<{ $variant: "card" | "list" }>`
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid white;
 
-  ${({ variant }) =>
-    variant === "card"
+  ${({ $variant }) =>
+    $variant === "card"
       ? `
     width: 150px;
     height: 150px;
@@ -44,8 +44,8 @@ const Image = styled.img<{ variant: "card" | "list" }>`
   `}
 
   @media (max-width: 768px) {
-    ${({ variant }) =>
-      variant === "card"
+    ${({ $variant }) =>
+      $variant === "card"
         ? `
     width: 130px;
     height: 130px;
@@ -63,12 +63,12 @@ const InfoContainer = styled.div`
   margin-left: 16px;
 `;
 
-const Name = styled.h2<{ variant: "card" | "list" }>`
+const Name = styled.h2<{ $variant: "card" | "list" }>`
   margin: 2px;
-  font-size: ${({ variant }) => (variant === "card" ? "1.5rem" : "1rem")};
+  font-size: ${({ $variant }) => ($variant === "card" ? "1.5rem" : "1rem")};
 
   @media (max-width: 768px) {
-    font-size: ${({ variant }) => (variant === "card" ? "1.2rem" : "0.9rem")};
+    font-size: ${({ $variant }) => ($variant === "card" ? "1.2rem" : "0.9rem")};
   }
 `;
 
@@ -76,13 +76,13 @@ const PlayerCard: React.FC<TPlayerCard> = ({
   name,
   imageUrl,
   onClick,
-  variant = "card",
+  variant = "list",
 }) => {
   return (
-    <Card variant={variant} onClick={onClick}>
-      <Image variant={variant} src={imageUrl} alt={`${name} - MVP`} />
+    <Card $variant={variant} onClick={onClick}>
+      <Image $variant={variant} src={imageUrl} alt={`${name} - MVP`} />
       <InfoContainer>
-        <Name variant={variant}>{name}</Name>
+        <Name $variant={variant}>{name}</Name>
       </InfoContainer>
     </Card>
   );

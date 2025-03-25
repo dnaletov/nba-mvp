@@ -4,10 +4,11 @@ import { getPlayers, getPlayerStats } from "./nbaApi";
 export const fetchPlayersWithImage = async (
   page: number,
   perPage: number = DEFAULT_PER_PAGE,
-  search: string
+  search: string,
+  signal?: AbortSignal
 ) => {
   try {
-    const playerData = await getPlayers(page, perPage, search);
+    const playerData = await getPlayers(page, perPage, search, signal);
 
     if (!Array.isArray(playerData)) {
       console.error("Invalid player data format", playerData);
@@ -20,7 +21,6 @@ export const fetchPlayersWithImage = async (
       imageUrl: `https://cdn.nba.com/headshots/nba/latest/1040x760/${player.id}.png`,
     }));
 
-    console.log("TEST:", playersWithImage);
     return playersWithImage;
   } catch (error) {
     console.error("Error fetching players:", error);
@@ -47,7 +47,6 @@ export const fetchPlayerStats = async (playerId: number) => {
       steals: player.STL,
     }));
 
-    console.log("TEST2:", playerStats);
     return playerStats;
   } catch (error) {
     console.error("Error fetching players:", error);

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import PlayerCard from "../molecules/PlayerCard";
 import Popup from "../atoms/Popup";
@@ -10,6 +10,13 @@ import {
 import PlayerStat from "../molecules/PlayerStat";
 import { DEFAULT_PER_PAGE } from "../../constants";
 import SearchInput from "../atoms/SearchInput";
+import useDebounce from "../../hooks/useDebounce";
+
+interface Player {
+  id: number;
+  name: string;
+  imageUrl: string;
+}
 
 const PlayersListWrapper = styled.section`
   min-height: 100vh;
@@ -46,100 +53,120 @@ const PlayersContainer = styled.div`
 `;
 
 const PlayersList: React.FC = () => {
-  const [visiblePlayers, setVisiblePlayers] = useState<any[]>([]);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [page, setPage] = useState(1);
-  const [selectedPlayer, setSelectedPlayer] = useState<any | null>(null);
+  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [playerStats, setPlayerStats] = useState<any | null>(null);
   const [isLoadingStats, setIsLoadingStats] = useState(false);
-  const isLoadingRef = useRef(false);
-
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [search, setSearch] = useState("");
+  const [hasMore, setHasMore] = useState(true);
+  const debouncedSearch = useDebounce(search, 500);
 
-  const filteredPlayers = visiblePlayers.filter((player) =>
-    player.name.toLowerCase().includes(search.toLowerCase())
+  const fetchPlayers = useCallback(
+    async (page: number, perPage: number, search: string) => {
+      if (!hasMore) return;
+
+      setIsFetchingMore(true);
+      const controller = new AbortController();
+      const signal = controller.signal;
+
+      try {
+        const newPlayers = await fetchPlayersWithImage(
+          page,
+          perPage,
+          search,
+          signal
+        );
+
+        if (!signal.aborted) {
+          if (newPlayers.length === 0) {
+            setHasMore(false);
+          }
+          setPlayers((prev) =>
+            page === 1 ? newPlayers : [...prev, ...newPlayers]
+          );
+        }
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error("Error fetching players:", error.message);
+        } else {
+          console.error("Unexpected error:", error);
+        }
+      } finally {
+        if (!signal.aborted) {
+          setIsFetchingMore(false);
+        }
+      }
+
+      return () => controller.abort();
+    },
+    [hasMore]
   );
 
-  const fetchPlayers = async (
-    page: number,
-    perPage: number,
-    search: string
-  ) => {
-    if (isLoadingRef.current) return;
-
-    isLoadingRef.current = true;
-    try {
-      const players = await fetchPlayersWithImage(page, perPage, search);
-      setVisiblePlayers((prev) =>
-        page === 1 ? players : [...prev, ...players]
-      );
-    } catch (error) {
-      console.error("Error fetching players:", error);
-    } finally {
-      isLoadingRef.current = false;
-    }
-  };
+  useEffect(() => {
+    setPage(1);
+    setHasMore(true);
+    setPlayers([]);
+  }, [debouncedSearch]);
 
   useEffect(() => {
-    fetchPlayers(page, DEFAULT_PER_PAGE, search);
-  }, [page, search]);
+    if (hasMore) {
+      fetchPlayers(page, DEFAULT_PER_PAGE, debouncedSearch);
+    }
+  }, [page, debouncedSearch, hasMore]);
 
   const handleCardClick = (player: any) => {
     setSelectedPlayer(player);
     setPlayerStats(null);
+    setIsLoadingStats(true);
+
+    fetchPlayerStats(player.id)
+      .then((stats) => setPlayerStats(stats[stats.length - 1] || null))
+      .catch((error) => console.error("Error fetching player stats:", error))
+      .finally(() => setIsLoadingStats(false));
   };
 
   useEffect(() => {
-    if (selectedPlayer) {
-      setIsLoadingStats(true);
-
-      fetchPlayerStats(selectedPlayer.id)
-        .then((stats) => setPlayerStats(stats[stats.length - 1] || null))
-        .catch((error) => {
-          console.error("Error fetching player stats:", error);
-          setPlayerStats(null);
-        })
-        .finally(() => setIsLoadingStats(false));
-    }
-  }, [selectedPlayer]);
-
-  const handleScroll = () => {
-    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-
-    if (
-      scrollTop + clientHeight >= scrollHeight * 0.95 &&
-      !isLoadingRef.current
-    ) {
-      setPage((prev) => prev + 1);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } =
+        document.documentElement;
+      if (
+        scrollTop + clientHeight >= scrollHeight * 0.95 &&
+        !isFetchingMore &&
+        hasMore
+      ) {
+        setPage((prev) => prev + 1);
+      }
     };
-  }, []);
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isFetchingMore, hasMore]);
 
   return (
     <PlayersListWrapper>
       <InnerContent>
         <SearchInput
           value={search}
-          onChange={setSearch}
-          placeholder={"Поиск игрока..."}
+          onChange={(e) => setSearch(e.target.value)}
         />
         <PlayersContainer>
-          {filteredPlayers.length > 0 ? (
-            filteredPlayers.map((player, id) => (
-              <PlayerCard
-                key={id}
-                {...player}
-                onClick={() => handleCardClick(player)}
-              />
-            ))
+          {players.length > 0 ? (
+            players
+              .filter((player) =>
+                player.name.toLowerCase().includes(search.toLowerCase())
+              )
+              .map((player) => (
+                <PlayerCard
+                  variant="list"
+                  key={player.id}
+                  {...player}
+                  onClick={() => handleCardClick(player)}
+                />
+              ))
           ) : (
-            <p>Игроков не найдено</p>
+            <p>No players available</p>
           )}
         </PlayersContainer>
       </InnerContent>
@@ -163,7 +190,7 @@ const PlayersList: React.FC = () => {
           )}
         </Popup>
       )}
-      {isLoadingRef.current && <LoadingPlaceholder />}
+      {isFetchingMore && <LoadingPlaceholder />}
     </PlayersListWrapper>
   );
 };

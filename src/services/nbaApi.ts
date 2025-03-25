@@ -6,11 +6,12 @@ const API_URL = "http://localhost:5000";
 export const getPlayers = async (
   page: number,
   perPage: number = DEFAULT_PER_PAGE,
-  search: string
+  search: string,
+  signal?: AbortSignal
 ) => {
   try {
     const response = await axios.get(`${API_URL}/players`, {
-      params: { page, per_page: perPage, activeOnly: true, search },
+      params: { page, per_page: perPage, activeOnly: true, search, signal },
     });
 
     return response.data.players;
