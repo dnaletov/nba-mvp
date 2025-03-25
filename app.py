@@ -117,21 +117,27 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-def get_paginated_players(page, per_page, active_only=False):
+def get_paginated_players(page, per_page, active_only=False, search=""):
     player_list = players.get_players()
     
     if active_only:
         player_list = [player for player in player_list if player.get('is_active', False)]
+    
+    if search:
+        player_list = [player for player in player_list if search.lower() in player['full_name'].lower()]
     
     start_index = (page - 1) * per_page
     end_index = start_index + per_page
     return player_list[start_index:end_index], len(player_list)
 
-def get_cursor_paginated_players(cursor, per_page, active_only=False):
+def get_cursor_paginated_players(cursor, per_page, active_only=False, search=""):
     player_list = players.get_players()
 
     if active_only:
         player_list = [player for player in player_list if player.get('is_active', False)]
+    
+    if search:
+        player_list = [player for player in player_list if search.lower() in player['full_name'].lower()]
     
     start_index = cursor if cursor else 0
     end_index = start_index + per_page
@@ -141,15 +147,16 @@ def get_cursor_paginated_players(cursor, per_page, active_only=False):
 
 @app.route("/players", methods=["GET"])
 def get_players():
-    per_page = int(request.args.get("per_page", 10)) 
+    per_page = int(request.args.get("per_page", 20))
     active_only = request.args.get("activeOnly", "false").lower() == "true"
+    search = request.args.get("search", "")
 
     page = request.args.get("page")
     cursor = request.args.get("cursor")
 
-    if cursor is not None: 
+    if cursor is not None:
         cursor = int(cursor)
-        players_data, next_cursor = get_cursor_paginated_players(cursor, per_page, active_only)
+        players_data, next_cursor = get_cursor_paginated_players(cursor, per_page, active_only, search)
         return jsonify({
             "players": players_data,
             "next_cursor": next_cursor
@@ -157,7 +164,7 @@ def get_players():
 
     if page is not None:
         page = int(page)
-        players_data, total_count = get_paginated_players(page, per_page, active_only)
+        players_data, total_count = get_paginated_players(page, per_page, active_only, search)
         next_cursor = page * per_page if len(players_data) == per_page else None
         return jsonify({
             "players": players_data,

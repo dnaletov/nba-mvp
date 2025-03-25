@@ -1,11 +1,16 @@
 import axios from "axios";
+import { DEFAULT_PER_PAGE } from "../constants";
 
 const API_URL = "http://localhost:5000";
 
-export const getPlayers = async (page: number, perPage: number = 20) => {
+export const getPlayers = async (
+  page: number,
+  perPage: number = DEFAULT_PER_PAGE,
+  search: string
+) => {
   try {
     const response = await axios.get(`${API_URL}/players`, {
-      params: { page, per_page: perPage, activeOnly: true },
+      params: { page, per_page: perPage, activeOnly: true, search },
     });
 
     return response.data.players;

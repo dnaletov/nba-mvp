@@ -8,6 +8,7 @@ import {
   fetchPlayerStats,
 } from "../../services/playersData";
 import PlayerStat from "../molecules/PlayerStat";
+import { DEFAULT_PER_PAGE } from "../../constants";
 
 const PlayersListWrapper = styled.section`
   min-height: 100vh;
@@ -18,10 +19,22 @@ const PlayersListWrapper = styled.section`
 
 const InnerContent = styled.div`
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
   @media (max-width: 768px) {
-    justify-content: flex-start;
+    align-items: flex-start;
   }
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  max-width: 400px;
+  padding: 8px 12px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  outline: none;
 `;
 
 const PlayersContainer = styled.div`
@@ -50,12 +63,22 @@ const PlayersList: React.FC = () => {
   const [isLoadingStats, setIsLoadingStats] = useState(false);
   const isLoadingRef = useRef(false);
 
-  const fetchPlayers = async (page: number) => {
+  const [search, setSearch] = useState("");
+
+  const filteredPlayers = visiblePlayers.filter((player) =>
+    player.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const fetchPlayers = async (
+    page: number,
+    perPage: number,
+    search: string
+  ) => {
     if (isLoadingRef.current) return;
 
     isLoadingRef.current = true;
     try {
-      const players = await fetchPlayersWithImage(page);
+      const players = await fetchPlayersWithImage(page, perPage, search);
       setVisiblePlayers((prev) =>
         page === 1 ? players : [...prev, ...players]
       );
@@ -67,8 +90,8 @@ const PlayersList: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchPlayers(page);
-  }, [page]);
+    fetchPlayers(page, DEFAULT_PER_PAGE, search);
+  }, [page, search]);
 
   const handleCardClick = (player: any) => {
     setSelectedPlayer(player);
@@ -111,21 +134,30 @@ const PlayersList: React.FC = () => {
   return (
     <PlayersListWrapper>
       <InnerContent>
+        <SearchInput
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Поиск игрока..."
+        />
         <PlayersContainer>
-          {visiblePlayers.length > 0 &&
-            visiblePlayers.map((player, id) => (
+          {filteredPlayers.length > 0 ? (
+            filteredPlayers.map((player, id) => (
               <PlayerCard
                 key={id}
                 {...player}
                 onClick={() => handleCardClick(player)}
               />
-            ))}
+            ))
+          ) : (
+            <p>Игроков не найдено</p>
+          )}
         </PlayersContainer>
       </InnerContent>
       {selectedPlayer && (
         <Popup onClose={() => setSelectedPlayer(null)}>
           {isLoadingStats ? (
-            <p>Loading stats...</p>
+            <LoadingPlaceholder />
           ) : playerStats ? (
             <PlayerStat
               name={selectedPlayer.name}

@@ -1,11 +1,13 @@
+import { DEFAULT_PER_PAGE } from "../constants";
 import { getPlayers, getPlayerStats } from "./nbaApi";
 
 export const fetchPlayersWithImage = async (
   page: number,
-  perPage: number = 20
+  perPage: number = DEFAULT_PER_PAGE,
+  search: string
 ) => {
   try {
-    const playerData = await getPlayers(page, perPage);
+    const playerData = await getPlayers(page, perPage, search);
 
     if (!Array.isArray(playerData)) {
       console.error("Invalid player data format", playerData);

@@ -2,34 +2,58 @@ import styled from "styled-components";
 
 interface TPlayerCard {
   name: string;
-  position: string;
-  team: string;
-  points: number;
   imageUrl: string;
   onClick?: () => void;
+  variant?: "card" | "list";
 }
 
-const Card = styled.div`
+const Card = styled.div<{ variant: "card" | "list" }>`
   display: flex;
-  background-color: #2d3748;
-  border-radius: 10px;
-  padding: 24px;
-  max-width: 800px;
-  min-width: 320px;
   align-items: center;
   cursor: pointer;
+  border-radius: 10px;
+  padding: 24px;
+  background-color: #2d3748;
+
+  ${({ variant }) =>
+    variant === "card"
+      ? `
+    max-width: 800px;
+    min-width: 320px;
+  `
+      : `
+    width: 100%;
+    padding: 8px;
+  `}
 `;
 
-const Image = styled.img`
-  width: 150px;
-  height: 150px;
+const Image = styled.img<{ variant: "card" | "list" }>`
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid white;
 
+  ${({ variant }) =>
+    variant === "card"
+      ? `
+    width: 150px;
+    height: 150px;
+  `
+      : `
+    width: 50px;
+    height: 50px;
+  `}
+
   @media (max-width: 768px) {
+    ${({ variant }) =>
+      variant === "card"
+        ? `
     width: 130px;
     height: 130px;
+  `
+        : `
+    width: 40px;
+    height: 40px;
+  `}
   }
 `;
 
@@ -39,41 +63,26 @@ const InfoContainer = styled.div`
   margin-left: 16px;
 `;
 
-const Name = styled.h2`
-  font-size: 1rem;
+const Name = styled.h2<{ variant: "card" | "list" }>`
   margin: 2px;
-
-  ${Card}:first-child & {
-    font-size: 1.5rem;
-    margin: 5px;
-  }
+  font-size: ${({ variant }) => (variant === "card" ? "1.5rem" : "1rem")};
 
   @media (max-width: 768px) {
-    font-size: 1.2rem;
-    margin: 2.5px;
+    font-size: ${({ variant }) => (variant === "card" ? "1.2rem" : "0.9rem")};
   }
 `;
 
-// const Text = styled.p`
-//   font-size: 0.8rem;
-//   margin: 2px;
-
-//   ${Card}:first-child & {
-//     font-size: 1.2rem;
-//     margin: 5px;
-//   }
-
-//   @media (max-width: 768px) {
-//     font-size: 0.8rem;
-//   }
-// `;
-
-const PlayerCard: React.FC<TPlayerCard> = ({ name, imageUrl, onClick }) => {
+const PlayerCard: React.FC<TPlayerCard> = ({
+  name,
+  imageUrl,
+  onClick,
+  variant = "card",
+}) => {
   return (
-    <Card onClick={onClick}>
-      <Image src={imageUrl} alt={`${name} - MVP`} />
+    <Card variant={variant} onClick={onClick}>
+      <Image variant={variant} src={imageUrl} alt={`${name} - MVP`} />
       <InfoContainer>
-        <Name>{name}</Name>
+        <Name variant={variant}>{name}</Name>
       </InfoContainer>
     </Card>
   );
