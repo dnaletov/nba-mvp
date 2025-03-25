@@ -9,24 +9,14 @@ export const getPlayers = async (
   search: string,
   signal?: AbortSignal
 ) => {
-  try {
-    const response = await axios.get(`${API_URL}/players`, {
-      params: { page, per_page: perPage, activeOnly: true, search, signal },
-    });
-
-    return response.data.players;
-  } catch (error) {
-    console.error("Error fetching players:", error);
-    throw error;
-  }
+  const response = await axios.get(`${API_URL}/players`, {
+    params: { page, per_page: perPage, activeOnly: true, search },
+    signal,
+  });
+  return response.data.players;
 };
 
 export const getPlayerStats = async (playerId: number) => {
-  try {
-    const response = await axios.get(`${API_URL}/player/${playerId}`);
-    return response.data;
-  } catch (error) {
-    console.error(`Error fetching stats for player ${playerId}:`, error);
-    throw error;
-  }
+  const response = await axios.get(`${API_URL}/player/${playerId}`);
+  return response.data;
 };
