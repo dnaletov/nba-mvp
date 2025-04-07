@@ -3,8 +3,8 @@ import styled from "styled-components";
 interface TPlayerCard {
   name: string;
   imageUrl: string;
-  onClick?: () => void;
-  variant?: "card" | "list";
+  onClick: () => void;
+  variant: "card" | "list";
 }
 
 const Card = styled.div<{ $variant: "card" | "list" }>`

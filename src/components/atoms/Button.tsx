@@ -1,7 +1,7 @@
 interface TPButton {
   onClick: () => void;
-  disabled?: boolean;
-  children?: React.ReactNode;
+  disabled: boolean;
+  children: React.ReactNode;
 }
 
 export const Button: React.FC<TPButton> = ({

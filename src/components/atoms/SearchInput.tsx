@@ -10,13 +10,13 @@ const Input = styled.input`
   outline: none;
 `;
 
-interface SearchInputProps {
+interface TextInputProps {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
+  placeholder: string;
 }
 
-const SearchInput: React.FC<SearchInputProps> = ({
+const TextInput: React.FC<TextInputProps> = ({
   value,
   onChange,
   placeholder,
@@ -26,9 +26,9 @@ const SearchInput: React.FC<SearchInputProps> = ({
       type="text"
       value={value}
       onChange={onChange}
-      placeholder={placeholder || "Search..."}
+      placeholder={placeholder || "Type text..."}
     />
   );
 };
 
-export default SearchInput;
+export default TextInput;

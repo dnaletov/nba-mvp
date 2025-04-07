@@ -1,4 +1,3 @@
-// components/organisms/PlayerStatsPopup.tsx
 import Popup from "../atoms/Popup";
 import LoadingPlaceholder from "../atoms/LoadingIndicator";
 import PlayerStat from "../molecules/PlayerStat";
