@@ -1,11 +1,11 @@
-import PlayersList from "../organisms/PlayersList";
+// import PlayersList from "./PlayersList";
 
-const HomePage: React.FC = () => {
-  return (
-    <main>
-      <PlayersList />
-    </main>
-  );
-};
+// const HomePage: React.FC = () => {
+//   return (
+//     <main>
+//       <PlayersList />
+//     </main>
+//   );
+// };
 
-export default HomePage;
+// export default HomePage;

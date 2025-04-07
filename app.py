@@ -115,7 +115,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["http://localhost:5173"])
 
 def get_paginated_players(page, per_page, active_only=False, search=""):
     player_list = players.get_players()
