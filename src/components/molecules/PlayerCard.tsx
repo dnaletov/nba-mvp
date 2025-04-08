@@ -76,7 +76,7 @@ const PlayerCard: React.FC<TPlayerCard> = ({
   name,
   imageUrl,
   onClick,
-  variant = "list",
+  variant,
 }) => {
   return (
     <Card $variant={variant} onClick={onClick}>

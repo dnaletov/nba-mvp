@@ -26,3 +26,18 @@ export const getPlayerStats = async (
   const response = await axios.get(`${API_URL}/player/${playerId}`);
   return response.data;
 };
+
+export const getLeadersOfRebounds = async (): Promise<RawPlayerStats[]> => {
+  const response = await axios.get(`${API_URL}/leaders/rebounds`);
+  return response.data;
+};
+
+export const getLeadersOfAssists = async (): Promise<RawPlayerStats[]> => {
+  const response = await axios.get(`${API_URL}/leaders/assists`);
+  return response.data;
+};
+
+export const getLeadersOfPoints = async (): Promise<RawPlayerStats[]> => {
+  const response = await axios.get(`${API_URL}/leaders/points`);
+  return response.data;
+};

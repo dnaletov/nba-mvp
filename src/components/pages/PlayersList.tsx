@@ -59,7 +59,11 @@ const PlayersList: React.FC = () => {
     <Wrapper>
       <InnerContent>
         <SearchBar value={search} onChange={setSearch} />
-        <PlayerGrid players={players} onClick={handleCardClick} />
+        <PlayerGrid
+          players={players}
+          onClick={handleCardClick}
+          variant={"list"}
+        />
       </InnerContent>
 
       <PlayerStatsPopup

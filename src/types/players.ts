@@ -17,4 +17,6 @@ export interface RawPlayerStats {
   PTS: number;
   REB: number;
   STL: number;
+  PLAYER_ID: number;
+  PLAYER: string;
 }

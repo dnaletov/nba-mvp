@@ -182,7 +182,7 @@ def leaders_points():
     leaders = leagueleaders.LeagueLeaders(season="2024-25")
     data = leaders.get_data_frames()[0]
 
-    leaders_points = data[['PLAYER', 'PTS']].sort_values(by='PTS', ascending=False)
+    leaders_points = data[['PLAYER', 'PLAYER_ID', 'PTS']].sort_values(by='PTS', ascending=False)
 
     leaders_list = leaders_points.to_dict(orient="records")
     return jsonify(leaders_list)
@@ -192,7 +192,7 @@ def leaders_rebounds():
     leaders = leagueleaders.LeagueLeaders(season="2024-25")
     data = leaders.get_data_frames()[0]
 
-    leaders_rebounds = data[['PLAYER', 'REB']].sort_values(by='REB', ascending=False)
+    leaders_rebounds = data[['PLAYER', 'PLAYER_ID', 'REB']].sort_values(by='REB', ascending=False)
 
     leaders_list = leaders_rebounds.to_dict(orient="records")
     return jsonify(leaders_list)
@@ -202,7 +202,7 @@ def leaders_assists():
     leaders = leagueleaders.LeagueLeaders(season="2024-25")
     data = leaders.get_data_frames()[0]
 
-    leaders_assists = data[['PLAYER', 'AST']].sort_values(by='AST', ascending=False)
+    leaders_assists = data[['PLAYER', 'PLAYER_ID', 'AST']].sort_values(by='AST', ascending=False)
 
     leaders_list = leaders_assists.to_dict(orient="records")
     return jsonify(leaders_list)

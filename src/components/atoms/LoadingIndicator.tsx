@@ -12,7 +12,7 @@ const LoadingIndicator: React.FC = () => {
   return (
     <LoadingWrapper>
       <img
-        src="https://i.pinimg.com/originals/2e/ce/ce/2ececec5431d0a1b7eae4e1acac7c59f.gif"
+        src="https://cdn.pixabay.com/animation/2023/08/11/21/18/21-18-05-265_512.gif"
         alt="Loading..."
       />
     </LoadingWrapper>
