@@ -1,10 +1,10 @@
 import Popup from "../atoms/Popup";
 import LoadingPlaceholder from "../atoms/LoadingIndicator";
 import PlayerStat from "../molecules/PlayerStat";
-import { Player } from "../../types/players";
+import { TPPlayer } from "../../types/players";
 
 interface PlayerStatsPopupProps {
-  player: Player | null;
+  player: TPPlayer | null;
   stats: any;
   isLoading: boolean;
   onClose: () => void;

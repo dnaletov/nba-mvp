@@ -3,15 +3,15 @@ import { useState, useCallback } from "react";
 import { getPlayers, getPlayerStats } from "../services/nbaApi";
 import { DEFAULT_PER_PAGE } from "../constants";
 import useDebounce from "./useDebounce";
-import { Player, RawPlayerStats, RawPlayer } from "../types/players";
+import { TPPlayer, TPRawPlayerStats, TPRawPlayer } from "../types/players";
 
-const mapPlayer = (raw: RawPlayer): Player => ({
+const mapPlayer = (raw: TPRawPlayer): TPPlayer => ({
   id: raw.id,
   name: raw.full_name,
   imageUrl: `https://cdn.nba.com/headshots/nba/latest/1040x760/${raw.id}.png`,
 });
 
-const mapPlayerStats = (raw: RawPlayerStats) => ({
+const mapPlayerStats = (raw: TPRawPlayerStats) => ({
   age: raw.PLAYER_AGE,
   team: raw.TEAM_ABBREVIATION,
   assists: raw.AST,
@@ -24,7 +24,7 @@ const mapPlayerStats = (raw: RawPlayerStats) => ({
 export const usePlayersQuery = () => {
   const [search, setSearch] = useState("");
   const debouncedSearch = useDebounce(search, 500);
-  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
+  const [selectedPlayer, setSelectedPlayer] = useState<TPPlayer | null>(null);
 
   const playersQuery = useInfiniteQuery({
     queryKey: ["players", debouncedSearch],
@@ -54,7 +54,7 @@ export const usePlayersQuery = () => {
     enabled: !!selectedPlayer,
   });
 
-  const handleCardClick = useCallback((player: Player) => {
+  const handleCardClick = useCallback((player: TPPlayer) => {
     setSelectedPlayer(player);
   }, []);
 

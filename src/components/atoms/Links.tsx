@@ -1,8 +1,12 @@
 import { Link } from "react-router-dom";
 
-const Links: React.FC<{ to: string; children: React.ReactNode }> = ({
-  to,
-  children,
-}) => <Link to={to}>{children}</Link>;
+interface TPLinks {
+  to: string;
+  children: React.ReactNode;
+}
+
+const Links: React.FC<TPLinks> = ({ to, children }) => (
+  <Link to={to}>{children}</Link>
+);
 
 export default Links;

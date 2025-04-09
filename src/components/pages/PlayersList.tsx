@@ -1,27 +1,10 @@
-import styled from "styled-components";
 import { useEffect } from "react";
 import LoadingPlaceholder from "../atoms/LoadingIndicator";
 import PlayerGrid from "../organisms/PlayerGrid";
 import PlayerStatsPopup from "../organisms/PlayerStatsPopup";
 import { usePlayersQuery } from "../../hooks/usePlayersQuery";
 import SearchBar from "../molecules/SearchBar";
-
-const Wrapper = styled.section`
-  min-height: 100vh;
-  padding: 46px;
-  background-color: rgb(182, 182, 182);
-  overflow-y: auto;
-`;
-
-const InnerContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-
-  @media (max-width: 768px) {
-    align-items: flex-start;
-  }
-`;
+import { InnerContent, Wrapper } from "./PlayersList.styled";
 
 const PlayersList: React.FC = () => {
   const {

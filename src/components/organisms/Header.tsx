@@ -1,35 +1,6 @@
-import styled from "styled-components";
 import logo from "../../assets/basketball-ball-svgrepo-com.svg";
 import Links from "../atoms/Links";
-
-const HeaderWrapper = styled.header`
-  display: flex;
-  align-items: center;
-  padding: 8px;
-  background-color: #2d3748;
-  width: 100%;
-  position: fixed;
-  a {
-    color: white;
-  }
-`;
-
-const Logo = styled.div`
-  cursor: pointer;
-  img {
-    width: 30px;
-  }
-`;
-
-const Nav = styled.nav`
-  flex-grow: 1;
-`;
-
-const List = styled.ul`
-  display: flex;
-  gap: 1.5rem;
-  justify-content: flex-end;
-`;
+import { HeaderWrapper, List, Logo, Nav } from "./Header.styled";
 
 const Header: React.FC = () => {
   return (

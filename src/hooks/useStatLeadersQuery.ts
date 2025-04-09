@@ -4,11 +4,11 @@ import {
   getLeadersOfRebounds,
   getLeadersOfAssists,
 } from "../services/nbaApi";
-import { RawPlayerStats } from "../types/players";
+import { TPRawPlayerStats } from "../types/players";
 
 type StatType = "points" | "rebounds" | "assists";
 
-const fetchers: Record<StatType, () => Promise<RawPlayerStats[]>> = {
+const fetchers: Record<StatType, () => Promise<TPRawPlayerStats[]>> = {
   points: getLeadersOfPoints,
   rebounds: getLeadersOfRebounds,
   assists: getLeadersOfAssists,

@@ -1,18 +1,12 @@
-import styled from "styled-components";
 import TextInput from "../atoms/SearchInput";
+import { Wrapper } from "./SearchBar.styled";
 
-interface SearchBarProps {
+interface TPSearchBar {
   value: string;
   onChange: (value: string) => void;
 }
 
-const Wrapper = styled.div`
-  width: 100%;
-  max-width: 600px;
-  margin-bottom: 24px;
-`;
-
-const SearchBar: React.FC<SearchBarProps> = ({ value, onChange }) => {
+const SearchBar: React.FC<TPSearchBar> = ({ value, onChange }) => {
   return (
     <Wrapper>
       <TextInput

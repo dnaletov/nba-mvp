@@ -1,15 +1,15 @@
-export interface Player {
+export interface TPPlayer {
   id: number;
   name: string;
   imageUrl: string;
 }
 
-export interface RawPlayer {
+export interface TPRawPlayer {
   id: number;
   full_name: string;
 }
 
-export interface RawPlayerStats {
+export interface TPRawPlayerStats {
   PLAYER_AGE: number;
   TEAM_ABBREVIATION: string;
   AST: number;

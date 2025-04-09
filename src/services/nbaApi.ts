@@ -1,6 +1,6 @@
 import axios from "axios";
 import { DEFAULT_PER_PAGE } from "../constants";
-import { RawPlayer, RawPlayerStats } from "../types/players";
+import { TPRawPlayer, TPRawPlayerStats } from "../types/players";
 
 const API_URL = "http://localhost:5000";
 
@@ -8,7 +8,7 @@ export const getPlayers = async (
   page: number,
   perPage: number = DEFAULT_PER_PAGE,
   search: string
-): Promise<RawPlayer[]> => {
+): Promise<TPRawPlayer[]> => {
   const response = await axios.get(`${API_URL}/players`, {
     params: {
       page,
@@ -22,22 +22,22 @@ export const getPlayers = async (
 
 export const getPlayerStats = async (
   playerId: number
-): Promise<RawPlayerStats[]> => {
+): Promise<TPRawPlayerStats[]> => {
   const response = await axios.get(`${API_URL}/player/${playerId}`);
   return response.data;
 };
 
-export const getLeadersOfRebounds = async (): Promise<RawPlayerStats[]> => {
+export const getLeadersOfRebounds = async (): Promise<TPRawPlayerStats[]> => {
   const response = await axios.get(`${API_URL}/leaders/rebounds`);
   return response.data;
 };
 
-export const getLeadersOfAssists = async (): Promise<RawPlayerStats[]> => {
+export const getLeadersOfAssists = async (): Promise<TPRawPlayerStats[]> => {
   const response = await axios.get(`${API_URL}/leaders/assists`);
   return response.data;
 };
 
-export const getLeadersOfPoints = async (): Promise<RawPlayerStats[]> => {
+export const getLeadersOfPoints = async (): Promise<TPRawPlayerStats[]> => {
   const response = await axios.get(`${API_URL}/leaders/points`);
   return response.data;
 };
