@@ -6,6 +6,7 @@ const LoadingWrapper = styled.div`
   justify-content: center;
   height: 20px;
   width: 20px;
+  margin: 20px;
 `;
 
 const LoadingIndicator: React.FC = () => {

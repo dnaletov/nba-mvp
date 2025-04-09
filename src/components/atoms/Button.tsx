@@ -1,3 +1,5 @@
+import { StyledButton } from "./Button.styled";
+
 interface TPButton {
   onClick: () => void;
   disabled: boolean;
@@ -10,8 +12,8 @@ export const Button: React.FC<TPButton> = ({
   children,
 }) => {
   return (
-    <button onClick={onClick} disabled={disabled}>
+    <StyledButton onClick={onClick} disabled={disabled}>
       {children}
-    </button>
+    </StyledButton>
   );
 };

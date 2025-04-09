@@ -4,6 +4,7 @@ import LoadingPlaceholder from "../atoms/LoadingIndicator";
 import PlayerGrid from "../organisms/PlayerGrid";
 import { TPPlayer, TPRawPlayerStats } from "../../types/players";
 import { InnerContent, StatSelector, Wrapper } from "./HomePage.styled";
+import { Button } from "../atoms/Button";
 
 interface TPStatLeadersData {
   players: TPRawPlayerStats[];
@@ -39,9 +40,13 @@ const HomePage: React.FC = () => {
       <InnerContent>
         <StatSelector>
           {categories.map((c) => (
-            <button key={c.key} onClick={() => setSelectedStat(c.key)}>
+            <Button
+              key={c.key}
+              onClick={() => setSelectedStat(c.key)}
+              disabled={selectedStat === c.key}
+            >
               {c.label}
-            </button>
+            </Button>
           ))}
         </StatSelector>
 

@@ -9,10 +9,6 @@ interface TPPlayerGrid {
 }
 
 const PlayerGrid: React.FC<TPPlayerGrid> = ({ players, onClick, variant }) => {
-  if (players.length === 0) {
-    return <p>No players available</p>;
-  }
-
   return (
     <Grid>
       {players.map((player) => (

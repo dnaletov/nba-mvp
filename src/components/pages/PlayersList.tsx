@@ -5,6 +5,7 @@ import PlayerStatsPopup from "../organisms/PlayerStatsPopup";
 import { usePlayersQuery } from "../../hooks/usePlayersQuery";
 import SearchBar from "../molecules/SearchBar";
 import { InnerContent, Wrapper } from "./PlayersList.styled";
+import LoadingIndicator from "../atoms/LoadingIndicator";
 
 const PlayersList: React.FC = () => {
   const {
@@ -42,11 +43,15 @@ const PlayersList: React.FC = () => {
     <Wrapper>
       <InnerContent>
         <SearchBar value={search} onChange={setSearch} />
-        <PlayerGrid
-          players={players}
-          onClick={handleCardClick}
-          variant={"list"}
-        />
+        {players.length === 0 ? (
+          <LoadingIndicator />
+        ) : (
+          <PlayerGrid
+            players={players}
+            onClick={handleCardClick}
+            variant={"list"}
+          />
+        )}
       </InnerContent>
 
       <PlayerStatsPopup
