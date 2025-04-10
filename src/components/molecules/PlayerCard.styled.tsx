@@ -6,6 +6,7 @@ export const Card = styled.div<{ $variant: "card" | "list" }>`
   cursor: pointer;
   border-radius: 10px;
   padding: 24px;
+  // margin: 0px 8px;
   background-color: #2d3748;
   position: relative;
 

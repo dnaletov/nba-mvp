@@ -10,8 +10,4 @@ export const InnerContent = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-
-  @media (max-width: 768px) {
-    align-items: flex-start;
-  }
 `;

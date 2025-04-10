@@ -3,7 +3,7 @@ import { useStatLeadersQuery } from "../../hooks/useStatLeadersQuery";
 import LoadingPlaceholder from "../atoms/LoadingIndicator";
 import PlayerGrid from "../organisms/PlayerGrid";
 import { TPPlayer, TPRawPlayerStats } from "../../types/players";
-import { InnerContent, StatSelector, Wrapper } from "./HomePage.styled";
+import { InnerContent, StatSelector, Wrapper, Title } from "./HomePage.styled";
 import { Button } from "../atoms/Button";
 import PlayerStatsPopup from "../organisms/PlayerStatsPopup";
 import { usePlayersQuery } from "../../hooks/usePlayersQuery";
@@ -44,12 +44,14 @@ const HomePage: React.FC = () => {
   return (
     <Wrapper>
       <InnerContent>
+        <Title>NBA leaders for the 2024/2025 season in</Title>
         <StatSelector>
           {categories.map((c) => (
             <Button
               key={c.key}
               onClick={() => setSelectedStat(c.key)}
-              disabled={selectedStat === c.key}
+              disabled={false}
+              active={selectedStat === c.key}
             >
               {c.label}
             </Button>

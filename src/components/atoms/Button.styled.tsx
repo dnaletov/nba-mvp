@@ -16,4 +16,9 @@ export const StyledButton = styled.button<{ active?: boolean }>`
   &:hover:not(:disabled) {
     background-color: ${({ active }) => (active ? "#111" : "#ddd")};
   }
+  @media (max-width: 768px) {
+    padding: 3px;
+    border-radius: 4px;
+    font-weight: normal;
+  }
 `;

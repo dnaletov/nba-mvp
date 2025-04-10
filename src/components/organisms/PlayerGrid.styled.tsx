@@ -5,7 +5,6 @@ export const Grid = styled.div`
   width: 100%;
   max-width: 800px;
   gap: 24px;
-  padding-bottom: 12px;
   justify-content: center;
 
   @media (min-width: 768px) {
