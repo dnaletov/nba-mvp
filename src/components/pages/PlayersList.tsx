@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import LoadingPlaceholder from "../atoms/LoadingIndicator";
 import PlayerGrid from "../organisms/PlayerGrid";
 import PlayerStatsPopup from "../organisms/PlayerStatsPopup";
 import { usePlayersQuery } from "../../hooks/usePlayersQuery";
@@ -60,7 +59,6 @@ const PlayersList: React.FC = () => {
         isLoading={isLoadingStats}
         onClose={() => setSelectedPlayer(null)}
       />
-      {/* {isFetchingNextPage && <LoadingPlaceholder />} */}
     </Wrapper>
   );
 };

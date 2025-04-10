@@ -14,7 +14,6 @@ const Header: React.FC = () => {
         <List>
           <Links to="/players">Players Info</Links>
           <Links to="/about">About</Links>
-          <Links to="/contacts">Contacts</Links>
         </List>
       </Nav>
     </HeaderWrapper>

@@ -15,6 +15,7 @@ interface TPlayerStat {
   assists: number;
   blocks: number;
   rebounds: number;
+  steals: number;
   imageUrl: string;
   onClick?: () => void;
 }
@@ -28,6 +29,7 @@ const PlayerStat: React.FC<TPlayerStat> = ({
   assists,
   rebounds,
   blocks,
+  steals,
 }) => {
   return (
     <Card>
@@ -41,6 +43,7 @@ const PlayerStat: React.FC<TPlayerStat> = ({
           <Text>Assists: {assists}</Text>
           <Text>Rebounds: {rebounds}</Text>
           <Text>Blocks: {blocks}</Text>
+          <Text>Steals: {steals}</Text>
         </InfoContainer>
       </ContentWrapper>
     </Card>

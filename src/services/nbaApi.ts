@@ -41,3 +41,13 @@ export const getLeadersOfPoints = async (): Promise<TPRawPlayerStats[]> => {
   const response = await axios.get(`${API_URL}/leaders/points`);
   return response.data;
 };
+
+export const getLeadersOfBlocks = async (): Promise<TPRawPlayerStats[]> => {
+  const response = await axios.get(`${API_URL}/leaders/blocks`);
+  return response.data;
+};
+
+export const getLeadersOfSteals = async (): Promise<TPRawPlayerStats[]> => {
+  const response = await axios.get(`${API_URL}/leaders/steals`);
+  return response.data;
+};
