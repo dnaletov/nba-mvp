@@ -11,12 +11,13 @@ interface TPPlayerGrid {
 const PlayerGrid: React.FC<TPPlayerGrid> = ({ players, onClick, variant }) => {
   return (
     <Grid>
-      {players.map((player) => (
+      {players.map((player, index) => (
         <PlayerCard
           variant={variant}
           key={player.id}
           {...player}
           onClick={() => onClick(player)}
+          position={variant === "card" ? index : undefined}
         />
       ))}
     </Grid>

@@ -6,7 +6,6 @@ export const HeaderWrapper = styled.header`
   padding: 8px;
   background-color: #2d3748;
   width: 100%;
-  position: fixed;
   a {
     color: white;
   }

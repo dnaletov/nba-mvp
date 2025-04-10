@@ -2,7 +2,6 @@ import styled from "styled-components";
 
 export const Wrapper = styled.section`
   min-height: 100vh;
-  padding: 46px;
   background-color: rgb(182, 182, 182);
   overflow-y: auto;
 `;

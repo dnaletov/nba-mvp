@@ -1,8 +1,7 @@
 import styled from "styled-components";
 
 export const StyledButton = styled.button<{ active?: boolean }>`
-  margin-top: 16px;
-  border: none;
+  padding: 8px 12px;
   border-radius: 8px;
   font-weight: bold;
   cursor: pointer;

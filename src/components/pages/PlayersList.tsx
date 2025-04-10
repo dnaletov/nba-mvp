@@ -60,8 +60,7 @@ const PlayersList: React.FC = () => {
         isLoading={isLoadingStats}
         onClose={() => setSelectedPlayer(null)}
       />
-
-      {isFetchingNextPage && <LoadingPlaceholder />}
+      {/* {isFetchingNextPage && <LoadingPlaceholder />} */}
     </Wrapper>
   );
 };

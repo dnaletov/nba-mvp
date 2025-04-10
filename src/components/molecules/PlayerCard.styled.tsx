@@ -7,6 +7,7 @@ export const Card = styled.div<{ $variant: "card" | "list" }>`
   border-radius: 10px;
   padding: 24px;
   background-color: #2d3748;
+  position: relative;
 
   ${({ $variant }) =>
     $variant === "card"
@@ -17,7 +18,7 @@ export const Card = styled.div<{ $variant: "card" | "list" }>`
       : `
     width: 100%;
     padding: 8px;
-  `}
+  `};
 `;
 
 export const Image = styled.img<{ $variant: "card" | "list" }>`
@@ -63,4 +64,27 @@ export const Name = styled.h2<{ $variant: "card" | "list" }>`
   @media (max-width: 768px) {
     font-size: ${({ $variant }) => ($variant === "card" ? "1.2rem" : "0.9rem")};
   }
+`;
+
+export const PositionLabel = styled.div`
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: #1a202c;
+  padding: 4px 8px;
+  border-radius: 6px;
+`;
+
+export const TrophyIcon = styled.img`
+  width: 20px;
+  height: 20px;
+`;
+
+export const PositionText = styled.span`
+  font-size: 1rem;
+  color: #ffd700;
+  font-weight: bold;
 `;
