@@ -1,5 +1,5 @@
 from nba_api.stats.static import players
-from nba_api.stats.endpoints import playercareerstats, leagueleaders
+from nba_api.stats.endpoints import playercareerstats, leagueleaders, leaguestandings
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from nba_api.stats.library.http import NBAStatsHTTP
@@ -105,7 +105,83 @@ def get_paginated_leaders(stat_column, cursor=None, page=None, per_page=20):
     return leaders_list[start_index:end_index], next_cursor
 
 
-# === Роуты ===
+# Cache for standings
+_standings_cache = {}
+
+def get_standings(season="2025-26"):
+    if season in _standings_cache:
+        return _standings_cache[season]
+    
+    try:
+        logger.info(f"Fetching standings for {season}...")
+        standings = leaguestandings.LeagueStandings(season=season)
+        df = standings.get_data_frames()[0]
+        # Columns: TeamID, TeamCity, TeamName, WinPCT, etc.
+        data = df.to_dict(orient="records")
+        _standings_cache[season] = data
+        return data
+    except Exception as e:
+        logger.error(f"Error fetching standings: {e}")
+        return []
+
+@app.route("/standings", methods=["GET"])
+def get_standings_route():
+    season = request.args.get("season", "2025-26")
+    return jsonify(get_standings(season))
+
+@app.route("/mvp-forecast", methods=["GET"])
+def get_mvp_forecast():
+    season = request.args.get("season", "2025-26")
+    
+    # 1. Get Leaders (top 50 for performance)
+    try:
+        leaders = leagueleaders.LeagueLeaders(season=season).get_data_frames()[0]
+        standings = get_standings(season)
+        
+        # Create a win% map for quick lookup
+        win_pct_map = {str(s['TeamID']): float(s['WinPCT']) for s in standings}
+        
+        forecast = []
+        for _, row in leaders.head(50).iterrows():
+            player_id = int(row['PLAYER_ID'])
+            team_id = str(row['TEAM_ID'])
+            win_pct = win_pct_map.get(team_id, 0.5) # Default to 0.5 if not found
+            
+            # Simple MVP Score Algorithm:
+            # Score = (PPG * 1.0) + (RPG * 0.5) + (APG * 0.5) + (Win% * 50)
+            # Note: LeagueLeaders returns totals, so we divide by GP
+            gp = row['GP'] if row['GP'] > 0 else 1
+            ppg = row['PTS'] / gp
+            rpg = row['REB'] / gp
+            apg = row['AST'] / gp
+            
+            mvp_score = ppg + (rpg * 0.5) + (apg * 0.5) + (win_pct * 50)
+            
+            forecast.append({
+                "PLAYER_ID": player_id,
+                "PLAYER": row['PLAYER'],
+                "TEAM": row['TEAM'],
+                "PTS": round(ppg, 1),
+                "REB": round(rpg, 1),
+                "AST": round(apg, 1),
+                "WIN_PCT": round(win_pct * 100, 1),
+                "SCORE": round(mvp_score, 2)
+            })
+            
+        # Sort by score and take top 6
+        forecast.sort(key=lambda x: x['SCORE'], reverse=True)
+        top_forecast = forecast[:6]
+        
+        # Calculate probability (relative to top score)
+        max_score = top_forecast[0]['SCORE'] if top_forecast else 1
+        for f in top_forecast:
+            f['PROBABILITY'] = round((f['SCORE'] / max_score) * 100, 1)
+            
+        return jsonify(top_forecast)
+        
+    except Exception as e:
+        logger.error(f"Error in mvp-forecast: {e}")
+        return jsonify({"error": str(e)}), 500
 
 @app.route("/players", methods=["GET"])
 def get_players_route():

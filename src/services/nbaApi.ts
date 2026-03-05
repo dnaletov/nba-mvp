@@ -44,3 +44,19 @@ export const getLeaders = async (
   const response = await axios.get(`${API_URL}/leaders/${endpoint}`);
   return response.data.players;
 };
+export interface TPMVPForecast {
+  PLAYER_ID: number;
+  PLAYER: string;
+  TEAM: string;
+  PTS: number;
+  REB: number;
+  AST: number;
+  WIN_PCT: number;
+  SCORE: number;
+  PROBABILITY: number;
+}
+
+export const getMVPForecast = async (): Promise<TPMVPForecast[]> => {
+  const response = await axios.get(`${API_URL}/mvp-forecast`);
+  return response.data;
+};
