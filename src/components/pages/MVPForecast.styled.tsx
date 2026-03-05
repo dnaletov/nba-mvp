@@ -24,7 +24,7 @@ export const SectionTitle = styled.h2`
 
   @media (max-width: 768px) {
     font-size: 2rem;
-    margin-top: 40px;
+    margin: 40px 0;
   }
 `;
 
