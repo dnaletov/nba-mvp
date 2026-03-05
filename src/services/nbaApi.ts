@@ -2,12 +2,12 @@ import axios from "axios";
 import { DEFAULT_PER_PAGE } from "../constants";
 import { TPRawPlayer, TPRawPlayerStats } from "../types/players";
 
-const API_URL = "http://localhost:5000";
+const API_URL = "http://localhost:5001";
 
 export const getPlayers = async (
   page: number,
   perPage: number = DEFAULT_PER_PAGE,
-  search: string
+  search: string,
 ): Promise<TPRawPlayer[]> => {
   const response = await axios.get(`${API_URL}/players`, {
     params: {
@@ -21,33 +21,26 @@ export const getPlayers = async (
 };
 
 export const getPlayerStats = async (
-  playerId: number
+  playerId: number,
 ): Promise<TPRawPlayerStats[]> => {
   const response = await axios.get(`${API_URL}/player/${playerId}`);
   return response.data;
 };
 
-export const getLeadersOfRebounds = async (): Promise<TPRawPlayerStats[]> => {
-  const response = await axios.get(`${API_URL}/leaders/rebounds`);
-  return response.data;
+export type StatType = "points" | "rebounds" | "assists" | "steals" | "blocks";
+
+const statToEndpoint: Record<StatType, string> = {
+  points: "points",
+  rebounds: "rebounds",
+  assists: "assists",
+  steals: "steals",
+  blocks: "blocks",
 };
 
-export const getLeadersOfAssists = async (): Promise<TPRawPlayerStats[]> => {
-  const response = await axios.get(`${API_URL}/leaders/assists`);
-  return response.data;
-};
-
-export const getLeadersOfPoints = async (): Promise<TPRawPlayerStats[]> => {
-  const response = await axios.get(`${API_URL}/leaders/points`);
-  return response.data;
-};
-
-export const getLeadersOfBlocks = async (): Promise<TPRawPlayerStats[]> => {
-  const response = await axios.get(`${API_URL}/leaders/blocks`);
-  return response.data;
-};
-
-export const getLeadersOfSteals = async (): Promise<TPRawPlayerStats[]> => {
-  const response = await axios.get(`${API_URL}/leaders/steals`);
-  return response.data;
+export const getLeaders = async (
+  stat: StatType,
+): Promise<TPRawPlayerStats[]> => {
+  const endpoint = statToEndpoint[stat];
+  const response = await axios.get(`${API_URL}/leaders/${endpoint}`);
+  return response.data.players;
 };

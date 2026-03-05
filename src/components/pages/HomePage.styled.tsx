@@ -16,6 +16,7 @@ export const Wrapper = styled.section`
   min-height: 100vh;
   background-color: rgb(182, 182, 182);
   overflow-y: auto;
+  padding-bottom: 2rem;
 `;
 
 export const InnerContent = styled.div`

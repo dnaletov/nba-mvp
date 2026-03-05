@@ -7,10 +7,7 @@ import { InnerContent, StatSelector, Wrapper, Title } from "./HomePage.styled";
 import { Button } from "../atoms/Button";
 import PlayerStatsPopup from "../organisms/PlayerStatsPopup";
 import { usePlayersQuery } from "../../hooks/usePlayersQuery";
-
-interface TPStatLeadersData {
-  players: TPRawPlayerStats[];
-}
+import { StatType } from "../../services/nbaApi";
 
 const mapPlayerFromStats = (raw: TPRawPlayerStats): TPPlayer => ({
   id: raw.PLAYER_ID,
@@ -18,15 +15,13 @@ const mapPlayerFromStats = (raw: TPRawPlayerStats): TPPlayer => ({
   imageUrl: `https://cdn.nba.com/headshots/nba/latest/1040x760/${raw.PLAYER_ID}.png`,
 });
 
-const categories = [
+const categories: { key: StatType; label: string }[] = [
   { key: "points", label: "Points" },
   { key: "rebounds", label: "Rebounds" },
   { key: "assists", label: "Assists" },
   { key: "steals", label: "Steals" },
   { key: "blocks", label: "Blocks" },
-] as const;
-
-type StatType = (typeof categories)[number]["key"];
+];
 
 const HomePage: React.FC = () => {
   const {
@@ -39,12 +34,10 @@ const HomePage: React.FC = () => {
   const [selectedStat, setSelectedStat] = useState<StatType>("points");
   const { data, isLoading, isError } = useStatLeadersQuery(selectedStat);
 
-  const playersData = data as TPStatLeadersData | undefined;
-
   return (
     <Wrapper>
       <InnerContent>
-        <Title>NBA leaders for the 2024/2025 season in</Title>
+        <Title>NBA leaders for the 2025/26 season</Title>
         <StatSelector>
           {categories.map((c) => (
             <Button
@@ -59,11 +52,11 @@ const HomePage: React.FC = () => {
         </StatSelector>
 
         {isLoading && <LoadingPlaceholder />}
-        {isError && <p>Error</p>}
+        {isError && <p>Error loading leaders</p>}
 
-        {playersData && (
+        {data && (
           <PlayerGrid
-            players={playersData.players.map(mapPlayerFromStats)}
+            players={data.map(mapPlayerFromStats)}
             onClick={handleCardClick}
             variant="card"
           />
