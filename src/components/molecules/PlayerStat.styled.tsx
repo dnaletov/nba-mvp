@@ -4,55 +4,124 @@ export const Card = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: #2d3748;
-  border-radius: 10px;
-  padding: 8px;
+  background: transparent;
+  width: 100%;
   max-width: 800px;
-  min-width: 320px;
-  text-align: center;
+  padding: 24px;
 `;
 
 export const Name = styled.h2`
-  font-size: 2rem;
-  color: white;
-  margin-bottom: 16px;
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  color: #fff;
+  margin-bottom: 24px;
+  text-align: center;
+  line-height: 1;
 
   @media (max-width: 767px) {
-    font-size: 1.4rem;
+    font-size: 1.75rem;
   }
 `;
 
 export const ContentWrapper = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  align-items: flex-start;
   justify-content: center;
-  gap: 16px;
+  gap: 40px;
   width: 100%;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+`;
+
+export const ImageContainer = styled.div`
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    z-index: -1;
+    opacity: 0.5;
+    filter: blur(8px);
+  }
 `;
 
 export const Image = styled.img`
-  width: 300px;
-  height: 300px;
+  width: 250px;
+  height: 250px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid white;
+  border: 4px solid var(--border-color);
+  background: var(--bg-dark);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 
   @media (max-width: 767px) {
-    width: 180px;
-    height: 180px;
+    width: 160px;
+    height: 160px;
   }
 `;
 
 export const InfoContainer = styled.div`
-  color: white;
-  text-align: left;
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  width: 100%;
 `;
 
-export const Text = styled.p`
-  font-size: 1.8rem;
-  margin: 4px;
+export const StatBox = styled.div`
+  background: rgba(255, 255, 255, 0.05);
+  padding: 16px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  text-align: center;
+  transition: all 0.3s ease;
 
-  @media (max-width: 767px) {
-    font-size: 1rem;
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
   }
+`;
+
+export const Label = styled.span`
+  display: block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+`;
+
+export const Value = styled.span`
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+`;
+
+export const TeamBadge = styled.div`
+  grid-column: span 2;
+  background: linear-gradient(90deg, var(--secondary), transparent);
+  padding: 12px 20px;
+  border-radius: 12px;
+  border-left: 4px solid var(--primary);
+  margin-bottom: 8px;
+
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 0.9rem;
 `;

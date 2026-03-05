@@ -1,21 +1,31 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const spin = keyframes`
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+`;
+
+const Spinner = styled.div`
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--card-bg);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  animation: ${spin} 1s linear infinite;
+`;
 
 const LoadingWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 20px;
-  width: 20px;
-  margin: 20px;
+  padding: 40px;
+  width: 100%;
 `;
 
 const LoadingIndicator: React.FC = () => {
   return (
     <LoadingWrapper>
-      <img
-        src="https://cdn.pixabay.com/animation/2023/08/11/21/18/21-18-05-265_512.gif"
-        alt="Loading..."
-      />
+      <Spinner />
     </LoadingWrapper>
   );
 };

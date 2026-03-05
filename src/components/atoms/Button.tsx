@@ -2,7 +2,7 @@ import { StyledButton } from "./Button.styled";
 
 interface TPButton {
   onClick: () => void;
-  disabled: boolean;
+  disabled?: boolean;
   children: React.ReactNode;
   active?: boolean;
 }
@@ -14,7 +14,7 @@ export const Button: React.FC<TPButton> = ({
   active = false,
 }) => {
   return (
-    <StyledButton onClick={onClick} disabled={disabled} active={active}>
+    <StyledButton onClick={onClick} disabled={disabled} $active={active}>
       {children}
     </StyledButton>
   );

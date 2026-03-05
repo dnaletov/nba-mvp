@@ -3,16 +3,16 @@ import styled from "styled-components";
 export const Grid = styled.div`
   display: grid;
   width: 100%;
-  max-width: 800px;
-  gap: 24px;
-  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  gap: 32px;
+  padding: 40px 0;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  justify-items: center;
 
-  @media (min-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
-
-    & > :first-child {
-      grid-column: span 2;
-      width: 100%;
-    }
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 20px 0;
   }
 `;

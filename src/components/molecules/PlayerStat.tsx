@@ -4,7 +4,11 @@ import {
   Image,
   InfoContainer,
   Name,
-  Text,
+  StatBox,
+  Label,
+  Value,
+  TeamBadge,
+  ImageContainer,
 } from "./PlayerStat.styled";
 
 interface TPlayerStat {
@@ -17,7 +21,6 @@ interface TPlayerStat {
   rebounds: number;
   steals: number;
   imageUrl: string;
-  onClick?: () => void;
 }
 
 const PlayerStat: React.FC<TPlayerStat> = ({
@@ -35,15 +38,35 @@ const PlayerStat: React.FC<TPlayerStat> = ({
     <Card>
       <Name>{name}</Name>
       <ContentWrapper>
-        <Image src={imageUrl} alt={`${name} - MVP`} />
+        <ImageContainer>
+          <Image src={imageUrl} alt={name} />
+        </ImageContainer>
         <InfoContainer>
-          <Text>Team: {team}</Text>
-          <Text>Age: {age}</Text>
-          <Text>Points: {points}</Text>
-          <Text>Assists: {assists}</Text>
-          <Text>Rebounds: {rebounds}</Text>
-          <Text>Blocks: {blocks}</Text>
-          <Text>Steals: {steals}</Text>
+          <TeamBadge>{team}</TeamBadge>
+          <StatBox>
+            <Label>Points</Label>
+            <Value>{points}</Value>
+          </StatBox>
+          <StatBox>
+            <Label>Assists</Label>
+            <Value>{assists}</Value>
+          </StatBox>
+          <StatBox>
+            <Label>Rebounds</Label>
+            <Value>{rebounds}</Value>
+          </StatBox>
+          <StatBox>
+            <Label>Blocks</Label>
+            <Value>{blocks}</Value>
+          </StatBox>
+          <StatBox>
+            <Label>Steals</Label>
+            <Value>{steals}</Value>
+          </StatBox>
+          <StatBox>
+            <Label>Age</Label>
+            <Value>{age}</Value>
+          </StatBox>
         </InfoContainer>
       </ContentWrapper>
     </Card>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useStatLeadersQuery } from "../../hooks/useStatLeadersQuery";
 import LoadingPlaceholder from "../atoms/LoadingIndicator";
 import PlayerGrid from "../organisms/PlayerGrid";
@@ -37,30 +38,69 @@ const HomePage: React.FC = () => {
   return (
     <Wrapper>
       <InnerContent>
-        <Title>NBA leaders for the 2025/26 season</Title>
-        <StatSelector>
-          {categories.map((c) => (
-            <Button
-              key={c.key}
-              onClick={() => setSelectedStat(c.key)}
-              disabled={false}
-              active={selectedStat === c.key}
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+        >
+          <Title>NBA leaders for the 2025/26 season</Title>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
+        >
+          <StatSelector>
+            {categories.map((c) => (
+              <Button
+                key={c.key}
+                onClick={() => setSelectedStat(c.key)}
+                active={selectedStat === c.key}
+              >
+                {c.label}
+              </Button>
+            ))}
+          </StatSelector>
+        </motion.div>
+
+        <AnimatePresence mode="wait">
+          {isLoading ? (
+            <motion.div
+              key="loader"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
             >
-              {c.label}
-            </Button>
-          ))}
-        </StatSelector>
-
-        {isLoading && <LoadingPlaceholder />}
-        {isError && <p>Error loading leaders</p>}
-
-        {data && (
-          <PlayerGrid
-            players={data.map(mapPlayerFromStats)}
-            onClick={handleCardClick}
-            variant="card"
-          />
-        )}
+              <LoadingPlaceholder />
+            </motion.div>
+          ) : isError ? (
+            <motion.p
+              key="error"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              style={{ color: "var(--primary)", marginTop: "20px" }}
+            >
+              Error loading leaders
+            </motion.p>
+          ) : (
+            <motion.div
+              key={selectedStat}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              style={{ width: "100%" }}
+            >
+              {data && (
+                <PlayerGrid
+                  players={data.map(mapPlayerFromStats)}
+                  onClick={handleCardClick}
+                  variant="card"
+                />
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
       </InnerContent>
       <PlayerStatsPopup
         player={selectedPlayer}
